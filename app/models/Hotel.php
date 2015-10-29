@@ -2,6 +2,7 @@
 
     class Hotel extends Eloquent
     {
+        public $sort = 'Asc';
 
         public function createItem(){
 
@@ -27,22 +28,29 @@
            
         }
         
-        public function GetListData($value=false){
+        public function GetListData($value=false,$sort=false){
 
-           if(isset($value) && $value != '' && $value != false){ 
+            if(!isset($sort) && $sort == '' && $sort == false){
+               $sort = $this->sort; 
+            }
+
+           if(isset($value) && $value != '' && $value != false && $value != '0' && $value != 0){     
            $data =  DB::table('hotel_details')
                     ->join('city_details', 'city_details.cityid', '=', 'hotel_details.cityid')
-                    ->where('city_details.cityid', $value)  
+                    ->where('city_details.cityid', $value)
+                    ->orderBy('hotel_details.hotelid', $sort)
                     ->get();
             }else{
             $data =  DB::table('hotel_details')
                     ->join('city_details', 'city_details.cityid', '=', 'hotel_details.cityid')
+                    ->orderBy('hotel_details.hotelid', $sort)
                     ->get();    
             }
 
-            
+           if(count($data) == 0){ 
+           return "NoData";
+           }else{
            $ListData = array();
-
            foreach ($data as $value)
             {
                  $ListData[$value->hotelid]['hotel_name'] = $value->hotel_name;
@@ -51,7 +59,9 @@
                  
             }
 
+
             return $ListData;
+           }
            
         }
     }

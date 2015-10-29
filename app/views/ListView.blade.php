@@ -30,11 +30,13 @@
 <br/>
 <br/>
 <br/>
+{{ Form::hidden('sort', '', array('id' => 'sort')) }}
+{{ Form::hidden('cityIdsort', '', array('id' => 'cityIdsort')) }}
 <table border="1" cellpadding="5" cellspacing="0">
     <tr>
     <thead>
         <th>
-            Hotel ID 
+            <button onclick="sortList()">Hotel ID </button>
         </th>
         <th>
             Hotel Name 
@@ -51,6 +53,9 @@
 
     
             <tbody id='hoteldataBlock'>
+                @if( $Hotels == 'NoData')
+                No Data to Display.
+                @else
         @foreach($Hotels as $key => $value)
     <tr>
         <td>
@@ -69,6 +74,7 @@
     
     </tr>
     @endforeach
+    @endif
             </tbody>    
         </table>
 <div id="loader" style="display: none">   

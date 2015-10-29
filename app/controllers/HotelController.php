@@ -18,16 +18,20 @@ class HotelController extends \BaseController {
 	{
             $CityData = $this->model->getCities();
             $HotelData = $this->model->GetListData();
-
+//echo $HotelData;die;
 		 return View::make('ListView')
                          ->with('Cities', $CityData)
                          ->with('Hotels', $HotelData);
 	}
         
-        public function Search($city_id){
+        public function Search($city_id,$sort){
 
-                    $HotelData = $this->model->GetListData($city_id);
 
+                    $HotelData = $this->model->GetListData($city_id,$sort);
+                    if($HotelData == 'NoData'){
+                    $Table_design  = "No Data to Display.";
+                    
+                    }else{
                     $Table_design = "";
                     foreach($HotelData As $index=>$value){
                         $Table_design  .= "<tr>";
@@ -37,7 +41,9 @@ class HotelController extends \BaseController {
                         $Table_design  .= "<td>".$value['address']."</td>";
                         $Table_design  .= "</tr>";
                     }
-
+                    }
+//                    echo $Table_design;die;
+//
                     return Response::json($Table_design); 
         }
         /**
